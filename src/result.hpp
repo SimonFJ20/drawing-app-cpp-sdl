@@ -71,30 +71,56 @@ public:
         return std::holds_alternative<Error>(value_or_error);
     }
 
-    [[nodiscard]] constexpr auto unwrap() -> Value&
+    [[nodiscard]] constexpr auto unwrap() & -> Value&
     {
         if (!is_ok())
             throw UnwrapError();
         return std::get<Value>(value_or_error);
     }
-    [[nodiscard]] constexpr auto unwrap() const -> const Value&
+    [[nodiscard]] constexpr auto unwrap() const& -> const Value&
     {
         if (!is_ok())
             throw UnwrapError();
         return std::get<Value>(value_or_error);
     }
 
-    [[nodiscard]] constexpr auto unwrap_error() -> Error&
+    [[nodiscard]] constexpr auto unwrap_error() & -> Error&
     {
         if (!is_error())
             throw UnwrapError();
         return std::get<Error>(value_or_error);
     }
-    [[nodiscard]] constexpr auto unwrap_error() const -> const Error&
+    [[nodiscard]] constexpr auto unwrap_error() const& -> const Error&
     {
         if (!is_error())
             throw UnwrapError();
         return std::get<Error>(value_or_error);
+    }
+
+    [[nodiscard]] constexpr auto unwrap() && -> Value&&
+    {
+        if (!is_ok())
+            throw UnwrapError();
+        return std::move(std::get<Value>(value_or_error));
+    }
+    [[nodiscard]] constexpr auto unwrap() const&& -> const Value&&
+    {
+        if (!is_ok())
+            throw UnwrapError();
+        return std::move(std::get<Value>(value_or_error));
+    }
+
+    [[nodiscard]] constexpr auto unwrap_error() && -> Error&&
+    {
+        if (!is_error())
+            throw UnwrapError();
+        return std::move(std::get<Error>(value_or_error));
+    }
+    [[nodiscard]] constexpr auto unwrap_error() const&& -> const Error&&
+    {
+        if (!is_error())
+            throw UnwrapError();
+        return std::move(std::get<Error>(value_or_error));
     }
 
     [[nodiscard]] constexpr auto ok() noexcept -> std::optional<Value&>
@@ -257,17 +283,30 @@ public:
         return !maybe_value.has_value();
     }
 
-    [[nodiscard]] constexpr auto unwrap() -> Value&
+    [[nodiscard]] constexpr auto unwrap() & -> Value&
     {
         if (!is_ok())
             throw UnwrapError();
         return *maybe_value;
     }
-    [[nodiscard]] constexpr auto unwrap() const -> const Value&
+    [[nodiscard]] constexpr auto unwrap() const& -> const Value&
     {
         if (!is_ok())
             throw UnwrapError();
         return *maybe_value;
+    }
+
+    [[nodiscard]] constexpr auto unwrap() && -> Value&&
+    {
+        if (!is_ok())
+            throw UnwrapError();
+        return std::move(*maybe_value);
+    }
+    [[nodiscard]] constexpr auto unwrap() const&& -> const Value&&
+    {
+        if (!is_ok())
+            throw UnwrapError();
+        return std::move(*maybe_value);
     }
 
     [[nodiscard]] constexpr auto ok() noexcept -> std::optional<Value&>
@@ -399,17 +438,30 @@ public:
         return maybe_error.has_value();
     }
 
-    [[nodiscard]] constexpr auto unwrap_error() -> Error&
+    [[nodiscard]] constexpr auto unwrap_error() & -> Error&
     {
         if (!is_error())
             throw UnwrapError();
         return *maybe_error;
     }
-    [[nodiscard]] constexpr auto unwrap_error() const -> const Error&
+    [[nodiscard]] constexpr auto unwrap_error() const& -> const Error&
     {
         if (!is_error())
             throw UnwrapError();
         return *maybe_error;
+    }
+
+    [[nodiscard]] constexpr auto unwrap_error() && -> Error&&
+    {
+        if (!is_error())
+            throw UnwrapError();
+        return std::move(*maybe_error);
+    }
+    [[nodiscard]] constexpr auto unwrap_error() const&& -> const Error&&
+    {
+        if (!is_error())
+            throw UnwrapError();
+        return std::move(*maybe_error);
     }
 
     [[nodiscard]] constexpr auto error() noexcept -> std::optional<Error&>
@@ -592,5 +644,4 @@ private:
 
 }
 
-template <typename Value, typename Error>
-using Result = result::Result<Value, Error>;
+using result::Result;

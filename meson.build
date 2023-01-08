@@ -9,6 +9,7 @@ project(
     ],
 )
 
+fmt_dep = dependency('fmt')
 sdl2_dep = dependency('sdl2')
 
 sources = []
@@ -23,6 +24,7 @@ exe = executable(
         include_directories('src'),
     ],
     dependencies: [
+        fmt_dep,
         sdl2_dep,
     ],
 )
